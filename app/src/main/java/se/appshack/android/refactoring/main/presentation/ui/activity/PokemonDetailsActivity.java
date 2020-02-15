@@ -1,11 +1,10 @@
-package se.appshack.android.refactoring;
+package se.appshack.android.refactoring.main.presentation.ui.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +19,11 @@ import java.util.Comparator;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import se.appshack.android.refactoring.main.data.model.GenusResponseModel;
+import se.appshack.android.refactoring.main.data.model.PokemonDetailsResponse;
+import se.appshack.android.refactoring.main.data.model.PokemonSpeciesResponse;
+import se.appshack.android.refactoring.main.data.model.PokemonTypeModel;
+import se.appshack.android.refactoring.R;
 
 public class PokemonDetailsActivity extends AppCompatActivity {
 
@@ -65,11 +69,12 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         protected void onPostExecute(PokemonDetailsResponse result) {
             super.onPostExecute(result);
 
-            ImageView imageFront = (ImageView) findViewById(R.id.imageFront);
-            Picasso.with(PokemonDetailsActivity.this).load(result.sprites.urlFront).into(imageFront);
+            ImageView imageFront = findViewById(R.id.imageFront);
 
-            ImageView imageBack = (ImageView) findViewById(R.id.imageBack);
-            Picasso.with(PokemonDetailsActivity.this).load(result.sprites.urlBack).into(imageBack);
+            Picasso.get().load(result.sprites.urlFront).into(imageFront);
+
+            ImageView imageBack = findViewById(R.id.imageBack);
+            Picasso.get().load(result.sprites.urlBack).into(imageBack);
 
             ((TextView) findViewById(R.id.pokemonNumber)).setText(String.format("#%s", result.id));
 

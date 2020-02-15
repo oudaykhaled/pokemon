@@ -1,8 +1,8 @@
-package se.appshack.android.refactoring;
+package se.appshack.android.refactoring.main.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-class PokemonTypeModel {
+public class PokemonTypeModel {
 
     @SerializedName("slot")
     public int slot;

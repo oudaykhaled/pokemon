@@ -1,10 +1,10 @@
-package se.appshack.android.refactoring;
+package se.appshack.android.refactoring.main.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class PokemonListResponse {
+public class PokemonListResponse {
 
     @SerializedName("count")
     public int count;

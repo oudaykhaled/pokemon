@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".main.presentation.ui.activity.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme" >
             <intent-filter>
@@ -24,7 +24,7 @@
         </activity>
 
         <activity
-            android:name=".PokemonDetailsActivity"
+            android:name=".main.presentation.ui.activity.PokemonDetailsActivity"
             android:label="@string/title_activity_pokemon_details"
             android:theme="@style/AppTheme">
         </activity>
