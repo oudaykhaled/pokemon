@@ -1,8 +1,8 @@
-package se.appshack.android.refactoring;
+package se.appshack.android.refactoring.main.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-class GenusResponseModel {
+public class GenusResponseModel {
 
     @SerializedName("genus")
     public String genus;

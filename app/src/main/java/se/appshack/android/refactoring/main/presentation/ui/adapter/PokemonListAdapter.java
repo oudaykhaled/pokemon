@@ -1,4 +1,4 @@
-package se.appshack.android.refactoring;
+package se.appshack.android.refactoring.main.presentation.ui.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +11,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class PokemonListAdapter extends RecyclerView.Adapter<PokemonViewHolder> {
+import se.appshack.android.refactoring.main.data.model.NamedResponseModel;
+import se.appshack.android.refactoring.main.presentation.ui.activity.PokemonDetailsActivity;
+import se.appshack.android.refactoring.R;
+
+public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.PokemonViewHolder> {
 
     private final Activity activity;
     private List<NamedResponseModel> data;
@@ -48,23 +52,25 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonViewHolder> 
     public int getItemCount() {
         return data.size();
     }
+
+    public class PokemonViewHolder extends RecyclerView.ViewHolder {
+
+        public PokemonViewHolder(@androidx.annotation.NonNull View itemView) {
+            super(itemView);
+        }
+
+        public void bind(NamedResponseModel pokemon) {
+            String number = String.format("#%s", pokemon.url.substring(pokemon.url.indexOf("pokemon/") + 8, pokemon.url.length() - 1));
+            ((TextView) itemView.findViewById(R.id.pokemon_number)).setText(number);
+
+            String formattedName = pokemon.name.substring(0,1).toUpperCase() + pokemon.name.substring(1);
+            ((TextView) itemView.findViewById(R.id.pokemon_name)).setText(formattedName);
+        }
+
+        public void setOnClickListener(View.OnClickListener listener) {
+            itemView.setOnClickListener(listener);
+        }
+    }
+
 }
 
-class PokemonViewHolder extends RecyclerView.ViewHolder {
-
-    public PokemonViewHolder(@NonNull View itemView) {
-        super(itemView);
-    }
-
-    public void bind(NamedResponseModel pokemon) {
-        String number = String.format("#%s", pokemon.url.substring(pokemon.url.indexOf("pokemon/") + 8, pokemon.url.length() - 1));
-        ((TextView) itemView.findViewById(R.id.pokemon_number)).setText(number);
-
-        String formattedName = pokemon.name.substring(0,1).toUpperCase() + pokemon.name.substring(1);
-        ((TextView) itemView.findViewById(R.id.pokemon_name)).setText(formattedName);
-    }
-
-    public void setOnClickListener(View.OnClickListener listener) {
-        itemView.setOnClickListener(listener);
-    }
-}
