@@ -1,32 +1,185 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+apply from: rootProject.file('dependencies.gradle')
+
+// Pokemon Base URL
+def pokeapiDev = "\"https://pokeapi.co/api/v2/\""
+def pokeapiUat = "\"https://pokeapi.co/api/v2/\""
+def pokeapiProd = "\"https://pokeapi.co/api/v2/\""
+
+// Sensitive Data
+// For Production - set all fields in the gradle.properties file
+// gradle.properties file should be never pushed to source control
+// To keep this information safe
+def keystorePassword = project.findProperty("keystorePassword") ?: "pass123123"
+def keystoreAlias = project.findProperty("keystoreAlias") ?: "key0"
+def keystoreKeyPassword = project.findProperty("keystoreKeyPassword") ?: "pass123123"
+def keystorePath = project.findProperty("keystorePath") ?: "release.keystore"
+
+
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
+
     defaultConfig {
         applicationId "se.appshack.android.refactoring"
-        minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion 24 //TODO Justify changing minSdk
+        targetSdkVersion 29
+        versionCode 11 //TODO Explain how versioning works
+        versionName "1.1" //TODO Explain how versioning works
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "pokeapiUrl", pokeapiDev
+
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+    signingConfigs {
+        config {
+            storeFile file(keystorePath)
+            storePassword keystorePassword
+            keyAlias keystoreAlias
+            keyPassword keystoreKeyPassword
+            v2SigningEnabled true
         }
     }
+
+
+    buildTypes {
+
+        dev {
+            applicationIdSuffix ".dev"
+            signingConfig signingConfigs.config
+            manifestPlaceholders = [appName: "Pokemon(Dev)"]
+            debuggable = true
+        }
+
+        uat {
+            applicationIdSuffix ".uat"
+            signingConfig signingConfigs.config
+            manifestPlaceholders = [appName: "Pokemon(UAT)"]
+            debuggable = true
+        }
+
+        production {
+            signingConfig signingConfigs.config
+            manifestPlaceholders = [appName: "Pokemon"]
+            debuggable = false
+            buildConfigField "String", "pokeapiUrl", pokeapiDev
+        }
+
+
+    }
+
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.squareup.picasso:picasso:2.3.4'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    testImplementation libraries.junit
+    testImplementation libraries.coreTest
+    testImplementation libraries.mockitoCore
+    androidTestImplementation libraries.mockito
+    androidTestImplementation libraries.testRules
+
+    androidTestImplementation libraries.extJunit
+    androidTestImplementation libraries.testRunner
+    androidTestImplementation libraries.espressoCore
+    androidTestImplementation libraries.espressoContrib
+    testImplementation libraries.coroutinesTest
+
+
+    implementation libraries.kotlin
+    implementation libraries.coroutinesCore
+    implementation libraries.coroutinesAndroid
+    implementation libraries.core
+    implementation libraries.coreKtx
+    implementation libraries.retrofit
+    implementation libraries.retrofitConverter
+    implementation libraries.gson
+    implementation libraries.retrofitAdapter
+    implementation libraries.jakewhartonAdapter
+    implementation libraries.espressoIntents
+    implementation libraries.dexter
+    implementation libraries.navFragment
+    implementation libraries.navFragmentKtx
+    implementation libraries.workmanager
+    implementation libraries.navUI
+    implementation libraries.navUIKtx
+    implementation libraries.viewPager2
+    implementation libraries.lifecycleextensions
+    kapt libraries.lifecycleCompiler
+    implementation libraries.lifecycleViewmodel
+    implementation libraries.lifecycleFragment
+    implementation libraries.liveData
+    implementation libraries.kotlinCoroutinesAdapter
+
+    implementation libraries.rxAndroid
+    implementation libraries.rxJava
+    implementation libraries.rxBindingAppCompat
+    implementation libraries.okhttp
+    implementation libraries.okhttpLogger
+    implementation libraries.room
+    implementation libraries.roomKtx
+    kapt libraries.roomCompiler
+    implementation libraries.fragmentsKtx
+    implementation libraries.material
+
+    implementation libraries.imageLoader
+
+
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+
+    /* Retrofit using RxJava2, Okhttp, Okhttp logging interceptor, Gson  */
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+
+    testImplementation "android.arch.core:core-testing:1.1.0"
+
+
+    /* Picasso lib for image loading  */
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    /* Android Architecture Component - ConstraintLayout  */
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    /* Android Architecture Component - LiveData & ViewModel  */
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+
+    /* Android Architecture Component - Room Persistance Lib  */
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    implementation 'android.arch.persistence.room:rxjava2:1.1.1'
+    kapt 'android.arch.persistence.room:compiler:1.1.1'
+
+    /* Dagger2 - We are going to use dagger.android which includes
+     * support for Activity and fragment injection so we need to include
+     * the following dependencies */
+    implementation 'com.google.dagger:dagger-android:2.17'
+    implementation 'com.google.dagger:dagger-android-support:2.17'
+    kapt 'com.google.dagger:dagger-android-processor:2.17'
+
+    /* Dagger2 - default dependency */
+    kapt 'com.google.dagger:dagger-compiler:2.17'
+
+    /* Add Kotlin support */
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.71'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
+    testImplementation libraries.mockitoCore
+    testImplementation 'com.squareup.retrofit2:retrofit-mock:2.3.0'
+    testImplementation "androidx.arch.core:core-testing:2.0.1"
+
+    implementation "com.google.android.material:material:1.1.0-alpha07"
 }
