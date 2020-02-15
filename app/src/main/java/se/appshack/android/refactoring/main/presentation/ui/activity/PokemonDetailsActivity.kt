@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
+import dagger.android.support.DaggerAppCompatActivity
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import se.appshack.android.refactoring.R
@@ -16,7 +16,7 @@ import se.appshack.android.refactoring.main.data.model.PokemonSpeciesResponse
 import java.io.IOException
 import java.util.*
 
-class PokemonDetailsActivity : AppCompatActivity() {
+class PokemonDetailsActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.google.gson.Gson
+import dagger.android.support.DaggerAppCompatActivity
 
 import java.io.IOException
 import java.util.ArrayList
@@ -22,7 +23,7 @@ import se.appshack.android.refactoring.main.data.model.PokemonListResponse
 import se.appshack.android.refactoring.R
 import se.appshack.android.refactoring.main.presentation.ui.adapter.PokemonListAdapter
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
