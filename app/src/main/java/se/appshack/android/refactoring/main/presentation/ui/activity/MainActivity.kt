@@ -2,10 +2,10 @@ package se.appshack.android.refactoring.main.presentation.ui.activity
 
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.google.gson.Gson
 
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             var response: PokemonListResponse? = null
             try {
                 val httpResponse = client.newCall(request).execute()
-                response = Gson().fromJson(httpResponse.body!!.string(), PokemonListResponse::class.java)
+                response = Gson().fromJson(httpResponse.body?.string(), PokemonListResponse::class.java)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             ids.sortWith(Comparator { integer, t1 -> integer - t1 })
 
             for (i in ids) {
-                pokemonModels.add(result.results[i - 1])
+                result.results?.get(i - 1)?.let { pokemonModels.add(it) }
             }
 
             val pokemonAdapter = PokemonListAdapter(this@MainActivity, pokemonModels)

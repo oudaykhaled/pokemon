@@ -78,10 +78,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     testImplementation libraries.junit
     testImplementation libraries.coreTest
     testImplementation libraries.mockitoCore
@@ -152,6 +151,7 @@ dependencies {
 
     /* Android Architecture Component - ConstraintLayout  */
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:design:+'
 
     /* Android Architecture Component - LiveData & ViewModel  */
     implementation 'android.arch.lifecycle:extensions:1.1.1'
@@ -170,8 +170,6 @@ dependencies {
 
     /* Dagger2 - default dependency */
     kapt 'com.google.dagger:dagger-compiler:2.17'
-
-    implementation 'com.squareup.picasso:picasso:2.3.4'
 
     /* Add Kotlin support */
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.71'
