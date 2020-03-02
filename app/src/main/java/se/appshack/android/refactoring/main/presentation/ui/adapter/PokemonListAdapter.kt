@@ -14,6 +14,13 @@ import se.appshack.android.refactoring.R
 
 class PokemonListAdapter(private val activity: Activity, private val data: List<NamedResponseModel>) : RecyclerView.Adapter<PokemonListAdapter.PokemonViewHolder>() {
 
+    private var onPokemonClicked: ((namedResponseModel: NamedResponseModel) -> Any )? = null
+
+    fun setOnPokemonClicked( onPokemonClicked: ((namedResponseModel: NamedResponseModel) -> Any ) ): PokemonListAdapter{
+        this.onPokemonClicked = onPokemonClicked
+        return this
+    }
+
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): PokemonViewHolder {
         return PokemonViewHolder(LayoutInflater.from(activity).inflate(R.layout.viewholder_pokemon_list, null, false))
     }
@@ -22,12 +29,9 @@ class PokemonListAdapter(private val activity: Activity, private val data: List<
         val responseModel = data[i]
 
         pokemonViewHolder.bind(responseModel)
+
         pokemonViewHolder.setOnClickListener(View.OnClickListener {
-            val intent = Intent()
-            intent.setClass(activity, PokemonDetailsActivity::class.java)
-            intent.putExtra("POKEMON_NAME", responseModel.name)
-            intent.putExtra("POKEMON_URL", responseModel.url)
-            activity.startActivity(intent)
+            onPokemonClicked?.invoke(responseModel)
         })
     }
 

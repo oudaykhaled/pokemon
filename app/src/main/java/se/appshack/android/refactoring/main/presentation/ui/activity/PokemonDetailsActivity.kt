@@ -1,35 +1,115 @@
 package se.appshack.android.refactoring.main.presentation.ui.activity
 
+import android.content.Context
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerAppCompatActivity
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import se.appshack.android.refactoring.R
+import se.appshack.android.refactoring.core.Result
+import se.appshack.android.refactoring.core.Status
+import se.appshack.android.refactoring.main.data.extensions.getID
+import se.appshack.android.refactoring.main.data.model.NamedResponseModel
 import se.appshack.android.refactoring.main.data.model.PokemonDetailsResponse
 import se.appshack.android.refactoring.main.data.model.PokemonSpeciesResponse
+import se.appshack.android.refactoring.main.domain.PokemonUseCase
+import se.appshack.android.refactoring.main.presentation.ui.adapter.PokemonListAdapter
 import java.io.IOException
 import java.util.*
+import javax.inject.Inject
 
 class PokemonDetailsActivity : DaggerAppCompatActivity() {
+
+    @Inject
+    lateinit var useCase: PokemonUseCase
+
+    private val pokemonLiveData = MediatorLiveData<Result<PokemonSpeciesResponse>>()
+
+    private var namedResponseModel: NamedResponseModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
         val intent = intent
-        val pokemonName = intent.extras?.getString("POKEMON_NAME")
-        title = pokemonName?.toUpperCase()
+        namedResponseModel = intent.extras?.getParcelable(TAG_NAMED_RESPONSE_MODEL)
+        title = namedResponseModel?.name?.toUpperCase()
 
-        val pokemonUrl = intent.extras?.getString("POKEMON_URL")
+        val pokemonUrl = namedResponseModel?.url
         val detailsTask = GetPokemonDetailsTask()
         detailsTask.execute(pokemonUrl)
+
+        pokemonLiveData.observe(this, androidx.lifecycle.Observer { pokemonDetails ->
+            when (pokemonDetails.status) {
+                Status.LOADING -> showLoading()
+                Status.ERROR -> dismissLoading()
+                Status.SUCCESS -> {
+                    dismissLoading()
+                    pokemonDetails.data?.let { showData(it) }
+                }
+            }
+        })
+
+        lifecycleScope.launchWhenCreated {
+            namedResponseModel?.getID()?.let { useCase.getPokemonDetails(it) }?.let {
+                pokemonLiveData.addSource(it) {
+                    pokemonLiveData.value = it
+                }
+            }
+        }
+
     }
+
+    private fun showData(result: PokemonSpeciesResponse) {
+        var genus = ""
+        result.genera?.let {
+            for (genusModel in it) {
+                if (genusModel.language?.name == "en") {
+                    genus = genusModel.genus.toString()
+                    break
+                }
+            }
+        }
+
+        (findViewById<View>(R.id.pokemonSpecies) as TextView).text = genus
+
+        findViewById<View>(R.id.loader).visibility = View.GONE
+    }
+
+
+    private fun dismissLoading() {
+        findViewById<View>(R.id.loader).visibility = View.GONE
+    }
+
+    private fun showLoading() {
+        findViewById<View>(R.id.loader).visibility = View.VISIBLE
+    }
+
+
+    companion object{
+
+        private const val TAG_NAMED_RESPONSE_MODEL = "TAG_NAMED_RESPONSE_MODEL"
+
+        fun newIntent(context: Context, namedResponseModel: NamedResponseModel): Intent {
+            val intent = Intent(context, PokemonDetailsActivity::class.java)
+            intent.putExtra(TAG_NAMED_RESPONSE_MODEL, namedResponseModel)
+            return intent
+        }
+
+    }
+
 
     inner class GetPokemonDetailsTask : AsyncTask<String, Void, PokemonDetailsResponse>() {
 
@@ -128,4 +208,5 @@ class PokemonDetailsActivity : DaggerAppCompatActivity() {
             findViewById<View>(R.id.loader).visibility = View.GONE
         }
     }
+
 }
