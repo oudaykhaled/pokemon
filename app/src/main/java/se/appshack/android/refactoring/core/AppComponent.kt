@@ -8,6 +8,8 @@ import se.appshack.android.refactoring.core.di.modules.ContextModule
 import se.appshack.android.refactoring.core.di.modules.CoroutinesThreadsProvider
 import se.appshack.android.refactoring.core.di.modules.NetworkModule
 import se.appshack.android.refactoring.core.di.modules.SchedulersModule
+import se.appshack.android.refactoring.main.di.PokemonDomain
+import se.appshack.android.refactoring.main.di.PokemonRemoteModule
 import javax.inject.Singleton
 
 @Singleton
@@ -16,8 +18,9 @@ import javax.inject.Singleton
         NetworkModule::class, ContextModule::class,
         ActivityBuilder::class,
         SchedulersModule::class,
-        CoroutinesThreadsProvider::class
-
+        CoroutinesThreadsProvider::class,
+        PokemonRemoteModule::class,
+        PokemonDomain::class
     ]
 )
 interface AppComponent {
