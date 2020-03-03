@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 import se.appshack.android.refactoring.main.data.model.NamedResponseModel
-import se.appshack.android.refactoring.main.presentation.ui.activity.PokemonDetailsActivity
 import se.appshack.android.refactoring.R
 
 class PokemonListAdapter(private val activity: Activity, private val data: List<NamedResponseModel>) : RecyclerView.Adapter<PokemonListAdapter.PokemonViewHolder>() {
