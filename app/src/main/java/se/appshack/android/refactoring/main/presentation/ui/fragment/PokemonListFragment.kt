@@ -64,9 +64,6 @@ class PokemonListFragment : DaggerFragment() {
 
     private fun navigateToPokemonDetails(pokemon: NamedResponseModel) {
         viewModel?.selectedPokemon = pokemon
-        Log.d("TESTING", "navigateToPokemonDetails ${pokemon.getID()}")
-        Log.d("TESTING", "navigateToPokemonDetails ${pokemon.name}")
-        Log.d("TESTING", "navigateToPokemonDetails ${pokemon.url}")
         view?.let {
             Navigation.findNavController(it).navigate(R.id.action_pokemonListFragment_to_pokemonDetailsFragment)
         }
