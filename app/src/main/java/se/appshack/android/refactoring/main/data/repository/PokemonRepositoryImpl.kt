@@ -18,6 +18,16 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun requestPokemonSpecies(pokemonID: Int) = liveData {
+        emit(Result.loading())
+        try {
+            val pokemonDetails = remoteDataSource.requestPokemonSpecies(pokemonID)
+            emit(Result.success(pokemonDetails))
+        } catch (exception: Exception) {
+            emit(Result.error(exception.message ?: ""))
+        }
+    }
+
     override suspend fun requestPokemons(limit: Int) =  liveData {
         emit(Result.loading())
         try {

@@ -11,8 +11,18 @@ class PokemonRemoteDataSourceImpl @Inject constructor(
     @CoroutinesIO private val context: CoroutineContext
 ) : PokemonRemoteDataSource {
 
-    override suspend fun requestPokemonDetails(pokemonID: Int) = withContext(context) {
+    override suspend fun requestPokemonDetails(pokemonID: Int)= withContext(context) {
         val response = pokemonService.requestPokemonDetails(pokemonID).await()
+        if (response.isSuccessful) {
+            response.body() ?: throw Exception("no Response")
+        } else {
+            throw Exception("invalid request with code ${response.code()}")
+        }
+    }
+
+
+    override suspend fun requestPokemonSpecies(pokemonID: Int) = withContext(context) {
+        val response = pokemonService.requestPokemonSpecies(pokemonID).await()
         if (response.isSuccessful) {
             response.body() ?: throw Exception("no Response")
         } else {

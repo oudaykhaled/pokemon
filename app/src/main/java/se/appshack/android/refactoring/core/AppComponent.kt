@@ -4,11 +4,13 @@ import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import se.appshack.android.refactoring.App
 import se.appshack.android.refactoring.core.builder.ActivityBuilder
+import se.appshack.android.refactoring.core.builder.FragmentBuilder
 import se.appshack.android.refactoring.core.di.modules.ContextModule
 import se.appshack.android.refactoring.core.di.modules.CoroutinesThreadsProvider
 import se.appshack.android.refactoring.core.di.modules.NetworkModule
 import se.appshack.android.refactoring.core.di.modules.SchedulersModule
 import se.appshack.android.refactoring.main.di.PokemonDomain
+import se.appshack.android.refactoring.main.di.PokemonPresentationModule
 import se.appshack.android.refactoring.main.di.PokemonRemoteModule
 import javax.inject.Singleton
 
@@ -19,8 +21,10 @@ import javax.inject.Singleton
         ActivityBuilder::class,
         SchedulersModule::class,
         CoroutinesThreadsProvider::class,
+        FragmentBuilder::class,
         PokemonRemoteModule::class,
-        PokemonDomain::class
+        PokemonDomain::class,
+        PokemonPresentationModule::class
     ]
 )
 interface AppComponent {

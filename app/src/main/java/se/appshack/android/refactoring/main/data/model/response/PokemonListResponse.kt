@@ -1,8 +1,9 @@
-package se.appshack.android.refactoring.main.data.model
+package se.appshack.android.refactoring.main.data.model.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import se.appshack.android.refactoring.main.data.model.NamedResponseModel
 
 @Parcelize
 data class PokemonListResponse (
