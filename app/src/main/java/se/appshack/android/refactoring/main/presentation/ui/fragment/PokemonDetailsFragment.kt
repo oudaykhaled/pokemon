@@ -40,11 +40,6 @@ class PokemonDetailsFragment : DaggerFragment() {
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(PokemonViewModel::class.java)
         activity?.title = viewModel?.selectedPokemon?.name?.toUpperCase().toString()
 
-
-        Log.d("TESTING", "onViewCreated ${viewModel?.selectedPokemon?.getID()}")
-        Log.d("TESTING", "onViewCreated ${viewModel?.selectedPokemon?.name}")
-        Log.d("TESTING", "onViewCreated ${viewModel?.selectedPokemon?.url}")
-
         viewModel?.selectedPokemon?.getID()?.let {
             viewModel?.getpokemonSpecies()?.observe(viewLifecycleOwner, Observer {
                 when (it.status) {
@@ -52,8 +47,6 @@ class PokemonDetailsFragment : DaggerFragment() {
                     Status.ERROR -> dismissLoading()
                     Status.SUCCESS -> {
                         dismissLoading()
-
-                        Log.d("TESTING", "requestPokemonSpecies ${it.data?.name}")
 
                         it.data?.let {pokemon -> populatePokemonSpecies(pokemon)}
                     }
