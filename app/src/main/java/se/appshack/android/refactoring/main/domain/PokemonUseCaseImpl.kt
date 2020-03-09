@@ -23,33 +23,9 @@ class PokemonUseCaseImpl @Inject constructor(private val repository: PokemonRepo
             when(it.status){
                 Status.SUCCESS -> Result.success(it.data?.results)
                 Status.LOADING -> Result.loading()
-                Status.ERROR -> Result.error(it.exception.toString())
+                Status.ERROR -> Result.error(it.exception?.message.toString())
             }
         }
     }
-
-//    private fun manipulatePokemonList(result: PokemonListResponse?): List<NamedResponseModel> {
-//        val pokemonModels = ArrayList<NamedResponseModel>()
-//
-//        val ids = ArrayList<Int>()
-//        var i = 0
-//        while (i < 20) {
-//            val id = (Math.random() * 151 + 1).toInt()
-//            if (ids.contains(id)) {
-//                i--
-//            } else {
-//                ids.add(id)
-//            }
-//            i++
-//        }
-//
-//        ids.sortWith(Comparator { integer, t1 -> integer - t1 })
-//
-//        for (i in ids) {
-//            result?.results?.get(i - 1)?.let { pokemonModels.add(it) }
-//        }
-//
-//        return pokemonModels
-//    }
 
 }
