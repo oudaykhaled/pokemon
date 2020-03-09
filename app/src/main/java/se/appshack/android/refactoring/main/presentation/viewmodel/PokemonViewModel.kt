@@ -21,7 +21,7 @@ class PokemonViewModel @Inject constructor(
     private val pokemonSpecies = MediatorLiveData<Result<PokemonSpeciesResponse>>()
     private val pokemonDetails = MediatorLiveData<Result<PokemonDetailsResponse>>()
 
-    fun getpokemonLiveData() = pokemonLiveData
+    fun getAllPokemonLiveData() = pokemonLiveData
     fun getpokemonSpecies() = pokemonSpecies
     fun getpokemonDetails() = pokemonDetails
 

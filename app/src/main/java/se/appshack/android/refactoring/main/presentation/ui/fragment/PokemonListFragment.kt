@@ -1,12 +1,9 @@
 package se.appshack.android.refactoring.main.presentation.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
@@ -16,7 +13,6 @@ import kotlinx.android.synthetic.main.fragment_pokemon_list.*
 import se.appshack.android.refactoring.R
 import se.appshack.android.refactoring.core.Status
 import se.appshack.android.refactoring.core.presentation.ViewModelFactory
-import se.appshack.android.refactoring.main.data.extensions.getID
 import se.appshack.android.refactoring.main.data.model.NamedResponseModel
 import se.appshack.android.refactoring.main.presentation.ui.adapter.PokemonListAdapter
 import se.appshack.android.refactoring.main.presentation.viewmodel.PokemonViewModel
@@ -41,7 +37,7 @@ class PokemonListFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(PokemonViewModel::class.java)
-        viewModel?.getpokemonLiveData()?.observe(viewLifecycleOwner, Observer {
+        viewModel?.getAllPokemonLiveData()?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.LOADING -> showLoading()
                 Status.ERROR -> dismissLoading()

@@ -14,7 +14,7 @@ class PokemonRepositoryImpl @Inject constructor(
             val pokemonDetails = remoteDataSource.requestPokemonDetails(pokemonID)
             emit(Result.success(pokemonDetails))
         } catch (exception: Exception) {
-            emit(Result.error(exception.message ?: ""))
+            emit(Result.error(exception?.message.toString()))
         }
     }
 
@@ -24,7 +24,7 @@ class PokemonRepositoryImpl @Inject constructor(
             val pokemonDetails = remoteDataSource.requestPokemonSpecies(pokemonID)
             emit(Result.success(pokemonDetails))
         } catch (exception: Exception) {
-            emit(Result.error(exception.message ?: ""))
+            emit(Result.error(exception?.message.toString()))
         }
     }
 
@@ -34,7 +34,7 @@ class PokemonRepositoryImpl @Inject constructor(
             val pokemons = remoteDataSource.requestPokemons(limit)
             emit(Result.success(pokemons))
         } catch (exception: Exception) {
-            emit(Result.error(exception.message ?: ""))
+            emit(Result.error(exception?.message.toString()))
         }
     }
 
