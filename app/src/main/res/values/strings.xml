@@ -6,4 +6,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pokemon_list">All Pokemons</string>
+    <string name="decimetres">%s decimetres</string>
+    <string name="hectograms">%s hectograms</string>
 </resources>
