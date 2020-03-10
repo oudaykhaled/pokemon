@@ -1,13 +1,26 @@
-# App Shack Android Refactoring Assignment
+# Pokemon App - Sample App showing how to refactor an app progressively
 
-### Description
-In this repository you will find a simple Android application containing two views. A list view that fetches some data from the network and displays it, and a details view that will display some more specific information about entities that are interacted with.
+Sample application shows the different kind of pokemons.
+This project is made in MVVMi patterns and follows the Clean Architecture Book written by Robert Martin.
 
-Your assignment is to refactor the Android project into something that _**you feel**_ is a more modern approach and is something that you would feel like working with in the future. _**Any changes are welcome**_, be them to design, architecture, language or otherwise. We encourage you to use standardized Android conventions and to build something that has maintainability, scalability and testability in mind.
+# Overall Architecture
+ 
+ 1- View (Activities, Fragments, Views ...): Manage the UI according to its ViewModel
+ 2- ViewModel: Connect Views to one or more use cases.
+ 3- Model: Data transmitted accross all architectre components
+ 4- Usecases: hold the business rules
+ 5- Repository: Manage Data sources
 
-We would like to mention that _**we do not**_ evaluate speed of delivery, although we would like to see some results within four weeks so that we could continue with the evaluation process.
+# Tech
 
-Good luck, and have fun!
-
+    1-  Kotlin
+    2-  ViewModel with Live Data.
+    3-  Coroutines
+    4-  Dagger 2
+    5-  RxJava/RxKotlin
+    6-  Retrofit
+    7-  JUnit
+    8-  Mochito
+    
 ### Documentation
 Documentation for the public Pokémon REST API can be found here: https://pokeapi.co
