@@ -75,19 +75,18 @@ class PokemonDetailsFragment : DaggerFragment() {
         Picasso.get().load(result.sprites?.frontDefault).into(imageFront)
         Picasso.get().load(result.sprites?.backDefault).into(imageBack)
         pokemonNumber.text = String.format("#%s", result.id)
-        val formattedName = result.name?.substring(0, 1)?.toUpperCase() + result.name?.substring(1)
-        pokemonName.text = formattedName
+        pokemonName.text = result.name?.capitalize()
         Collections.sort(result.types) { pokemonTypeModel, t1 -> pokemonTypeModel.slot - t1.slot }
         var types = ""
-        for (i in result.types?.indices!!) {
-            val typeModel = result.types!![i]
-            types += typeModel.type?.name?.substring(0, 1)?.toUpperCase() + typeModel.type?.name?.substring(1)
-            if (i < result.types!!.size - 1)
+        for (i in result.types?.indices) {
+            val typeModel = result.types[i]
+            types += typeModel.type?.name?.capitalize()
+            if (i < result.types.size - 1)
                 types += ", "
         }
         pokemonTypes.text = types
-        pokemonHeight.text = String.format("%s decimetres", result.height)
-        pokemonWeight.text = String.format("%s hectograms", result.weight)
+        pokemonHeight.text = String.format(getString(R.string.decimetres), result.height)
+        pokemonWeight.text = String.format(getString(R.string.hectograms), result.weight)
     }
 
     private fun populatePokemonSpecies(pokemon: PokemonSpeciesResponse) {

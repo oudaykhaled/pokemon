@@ -10,11 +10,14 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mock
 import retrofit2.Response
+import se.appshack.android.refactoring.core.cache.Cache
 import se.appshack.android.refactoring.main.data.model.response.PokemonListResponse
 import se.appshack.android.refactoring.main.data.remote.service.PokemonService
 import se.appshack.android.refactoring.main.data.remote.source.PokemonRemoteDataSource
 import se.appshack.android.refactoring.main.data.remote.source.PokemonRemoteDataSourceImpl
+
 
 class PokemonRemoteDataSourceTest {
 
@@ -29,6 +32,9 @@ class PokemonRemoteDataSourceTest {
 
     lateinit var service: PokemonService
 
+    @Mock
+    lateinit var cache: Cache
+
     val pokemonListResponse = PokemonListResponse()
     val firstPokemonNumber = 1
     val secondPokemonNumber = 2
@@ -41,6 +47,9 @@ class PokemonRemoteDataSourceTest {
 
     @Before
     fun init() {
+
+        cache = mock{}
+
         service = mock {
 
             onBlocking {
@@ -74,7 +83,7 @@ class PokemonRemoteDataSourceTest {
             }
 
         }
-        remoteDataSource = PokemonRemoteDataSourceImpl(service, mainCoroutineRule.coroutineContext)
+        remoteDataSource = PokemonRemoteDataSourceImpl(service, mainCoroutineRule.coroutineContext, cache)
     }
 
     @Test

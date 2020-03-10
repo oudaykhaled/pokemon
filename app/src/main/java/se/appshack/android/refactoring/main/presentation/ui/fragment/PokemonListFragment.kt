@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_pokemon_list.*
@@ -21,10 +22,13 @@ import javax.inject.Inject
 
 class PokemonListFragment : DaggerFragment() {
 
+    private var pokemonAdapter: PokemonListAdapter? = null
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
     private var viewModel: PokemonViewModel? = null
+
+    private val pokemonPosition = HashMap<String, Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +38,10 @@ class PokemonListFragment : DaggerFragment() {
         return inflater.inflate(R.layout.fragment_pokemon_list, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.title = getString(R.string.pokemon_list)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(PokemonViewModel::class.java)
@@ -48,13 +56,30 @@ class PokemonListFragment : DaggerFragment() {
                 }
             }
         })
+
+        viewModel?.getpokemonDetails()?.observe(viewLifecycleOwner, Observer {
+            if (it.status != Status.SUCCESS) return@Observer
+            val pokemonID = it.data?.id.toString()
+            pokemonPosition[pokemonID]?.let { it1 ->
+                it.data?.let { it2 ->
+                    pokemonAdapter?.addPokemonDetailsCache(pokemonID, it2,
+                        it1
+                    )
+                }
+            }
+        })
+
         viewModel?.requestPokemonsList()
     }
 
     private fun populatePokemonsList(lstPokemons: List<NamedResponseModel>) {
-        recyclerview.layoutManager = LinearLayoutManager(activity)
-        val pokemonAdapter = activity?.let { PokemonListAdapter(it, lstPokemons) }
+        recyclerview.layoutManager = GridLayoutManager(activity, 2)
+        pokemonAdapter = activity?.let { PokemonListAdapter(it, lstPokemons) }
             ?.setOnPokemonClicked { navigateToPokemonDetails(it) }
+            ?.setPokemonDetailsRequester { pokemonID, position ->
+                pokemonPosition.put(pokemonID, position)
+                viewModel?.requestPokemonDetails(pokemonID.toInt())
+            }
         recyclerview.adapter = pokemonAdapter
     }
 
